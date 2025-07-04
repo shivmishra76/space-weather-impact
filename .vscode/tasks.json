@@ -1,0 +1,32 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "CMake Build",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["-S", ".", "-B", "build"],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Make",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--build", "build"],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "CTest",
+      "type": "shell",
+      "command": "ctest",
+      "args": [],
+      "options": {
+        "cwd": "build"
+      },
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
+}
