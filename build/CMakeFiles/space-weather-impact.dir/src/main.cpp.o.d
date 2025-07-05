@@ -149,7 +149,11 @@ CMakeFiles/space-weather-impact.dir/src/main.cpp.o: \
  /usr/include/c++/13/bits/locale_facets.tcc \
  /usr/include/c++/13/bits/basic_ios.tcc \
  /usr/include/c++/13/bits/ostream.tcc /usr/include/c++/13/istream \
- /usr/include/c++/13/bits/istream.tcc /workspace/include/fetcher.h \
+ /usr/include/c++/13/bits/istream.tcc /usr/include/c++/13/fstream \
+ /usr/include/c++/13/bits/codecvt.h \
+ /usr/include/aarch64-linux-gnu/c++/13/bits/basic_file.h \
+ /usr/include/aarch64-linux-gnu/c++/13/bits/c++io.h \
+ /usr/include/c++/13/bits/fstream.tcc /workspace/include/fetcher.h \
  /usr/include/aarch64-linux-gnu/curl/curl.h \
  /usr/include/aarch64-linux-gnu/curl/curlver.h \
  /usr/include/aarch64-linux-gnu/curl/system.h \
@@ -270,8 +274,7 @@ CMakeFiles/space-weather-impact.dir/src/main.cpp.o: \
  /usr/include/c++/13/bits/locale_facets_nonio.h \
  /usr/include/aarch64-linux-gnu/c++/13/bits/time_members.h \
  /usr/include/aarch64-linux-gnu/c++/13/bits/messages_members.h \
- /usr/include/libintl.h /usr/include/c++/13/bits/codecvt.h \
- /usr/include/c++/13/bits/locale_facets_nonio.tcc \
+ /usr/include/libintl.h /usr/include/c++/13/bits/locale_facets_nonio.tcc \
  /usr/include/c++/13/bits/locale_conv.h /usr/include/c++/13/iomanip \
  /usr/include/c++/13/bits/quoted_string.h /usr/include/c++/13/sstream \
  /usr/include/c++/13/bits/sstream.tcc /usr/include/c++/13/codecvt \

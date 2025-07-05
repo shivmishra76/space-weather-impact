@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 #include "fetcher.h"
 #include "parser.h"
 #include "model.h"
@@ -22,8 +23,42 @@ int main(int argc, char* argv[]) {
             std::string url = "https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json";
             std::string response = Fetcher::fetch(url);
             auto json = Parser::parse(response);
-            std::cout << "Current Solar Indices:\n";
-            std::cout << json.dump(2) << std::endl;
+            std::cout << "Current Solar Indices (latest):\n";
+            if (!json.is_array() || json.empty()) {
+                std::cerr << "No data available.\n";
+                return 1;
+            }
+            auto latest = json.back();
+            // Print key indices
+            double f107 = latest.value("f107", -1.0);
+            double sunspot = latest.value("ssn", -1.0);
+            double xray = latest.value("xray", -1.0);
+            double kp = latest.value("kp", -1.0);
+            std::cout << "  F10.7: " << f107 << "\n";
+            std::cout << "  Sunspot Number: " << sunspot << "\n";
+            std::cout << "  X-ray Flux: " << xray << "\n";
+            std::cout << "  Kp Index: " << kp << "\n";
+
+            // Event detection: highlight if X-ray flux or Kp index is high
+            if (xray > 1e-4) {
+                std::cout << "  [Event] Solar flare detected (X-ray flux > 1e-4 W/m^2)!\n";
+            }
+            if (kp >= 5.0) {
+                std::cout << "  [Event] Geomagnetic storm conditions (Kp >= 5)!\n";
+            }
+
+            // Prepare data for plotting (F10.7 and Kp over time)
+            std::ofstream plotfile("solar_indices_plot.csv");
+            plotfile << "date,f107,kp\n";
+            for (const auto& entry : json) {
+                std::string date = entry.value("time-tag", "");
+                double f = entry.value("f107", -1.0);
+                double k = entry.value("kp", -1.0);
+                plotfile << date << "," << f << "," << k << "\n";
+            }
+            plotfile.close();
+            std::cout << "\nSaved F10.7 and Kp index history to solar_indices_plot.csv\n";
+            std::cout << "You can plot this data with: gnuplot -e \"set datafile separator ','; plot 'solar_indices_plot.csv' using 0:2 with lines title 'F10.7', '' using 0:3 with lines title 'Kp'\"\n";
         } else if (command == "satellite-impact") {
             std::string url = "https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json";
             std::string response = Fetcher::fetch(url);
@@ -32,10 +67,23 @@ int main(int argc, char* argv[]) {
             auto latest = json.back();
             double area = 10.0; // m^2, example
             double mass = 1000.0; // kg, example
+            double altitude = 400.0; // km, example (ISS)
             double drag = Model::calculateAtmosphericDrag(latest, area, mass);
             double comm = Model::calculateCommDegradation(latest);
+            double decay = Model::estimateOrbitDecay(latest, area, mass, altitude);
+            double panelDeg = Model::estimateSolarPanelDegradation(latest);
+            double radDose = Model::estimateRadiationDose(latest, altitude);
+            // Example SEU rate calculation
+            // Assume sensitive area = 1 cm^2, duration = 1 day
+            double seu_area = 1.0; // cm^2
+            double seu_duration = 86400.0; // seconds in a day
+            double seu_rate = Model::estimateSEURate(latest, seu_area, seu_duration);
             std::cout << "Atmospheric Drag: " << drag << "\n";
             std::cout << "Comm Degradation: " << comm << "\n";
+            std::cout << "Estimated Orbit Decay Rate: " << decay << " km/day\n";
+            std::cout << "Solar Panel Degradation: " << panelDeg << " %/year\n";
+            std::cout << "Radiation Dose: " << radDose << " mSv/day\n";
+            std::cout << "Estimated SEU Events (1 cm^2, 1 day): " << seu_rate << "\n";
         } else {
             printUsage();
             return 1;
