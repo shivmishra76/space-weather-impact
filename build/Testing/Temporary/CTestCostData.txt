@@ -1,5 +1,0 @@
-test_fetcher 1 0.538711
-test_parser 0 0
-test_model 1 0.00240512
----
-test_parser
