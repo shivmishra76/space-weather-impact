@@ -12,6 +12,35 @@ double Model::calculateAtmosphericDrag(const nlohmann::json& data, double area, 
     return drag;
 }
 
+// Advanced drag model using exponential atmosphere and physics-based drag equation
+// Inputs:
+//   data: JSON with keys "altitude_km", "f107", "kp" (optional)
+//   area: cross-sectional area (m^2)
+//   mass: satellite mass (kg)
+// Returns: drag acceleration (m/s^2)
+double Model::calculateAtmosphericDragAdvanced(const nlohmann::json& data, double area, double mass) {
+    // Constants
+    constexpr double R0 = 6371.0; // Earth radius (km)
+    constexpr double rho0 = 4e-12; // Reference density at 400 km (kg/m^3)
+    constexpr double H = 60.0;     // Scale height (km)
+    constexpr double Cd = 2.2;     // Drag coefficient (typical)
+    constexpr double v = 7700.0;   // Orbital velocity (m/s, LEO)
+
+    double altitude = data.value("altitude_km", 400.0);
+    double f107 = data.value("f107", 150.0);
+    double kp = data.value("kp", 2.0);
+
+    // Adjust scale height and density for solar activity (simple empirical fit)
+    double H_mod = H + 0.01 * (f107 - 150.0) + 0.5 * (kp - 2.0);
+    double rho = rho0 * std::exp(-(altitude - 400.0) / H_mod);
+
+    // Drag force: F = 0.5 * Cd * A * rho * v^2
+    double F_drag = 0.5 * Cd * area * rho * v * v;
+    // Acceleration: a = F/m
+    double a_drag = F_drag / mass;
+    return a_drag;
+}
+
 double Model::calculateCommDegradation(const nlohmann::json& data) {
     double xray = data.value("xray", 1.0);
     double degradation = xray * 0.1; // Placeholder

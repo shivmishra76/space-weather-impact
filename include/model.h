@@ -5,6 +5,8 @@
 class Model {
 public:
     static double calculateAtmosphericDrag(const nlohmann::json& spaceWeatherData, double satelliteArea, double satelliteMass);
+    // Advanced drag model (physics-based)
+    static double calculateAtmosphericDragAdvanced(const nlohmann::json& spaceWeatherData, double satelliteArea, double satelliteMass);
     static double calculateCommDegradation(const nlohmann::json& spaceWeatherData);
     static double estimateOrbitDecay(const nlohmann::json& spaceWeatherData, double satelliteArea, double satelliteMass, double altitude_km);
     static double estimateSolarPanelDegradation(const nlohmann::json& spaceWeatherData);

@@ -68,7 +68,11 @@ int main(int argc, char* argv[]) {
             double area = 10.0; // m^2, example
             double mass = 1000.0; // kg, example
             double altitude = 400.0; // km, example (ISS)
-            double drag = Model::calculateAtmosphericDrag(latest, area, mass);
+            // Add altitude to the JSON for advanced drag model
+            nlohmann::json latest_with_alt = latest;
+            latest_with_alt["altitude_km"] = altitude;
+            double drag_simple = Model::calculateAtmosphericDrag(latest, area, mass);
+            double drag_advanced = Model::calculateAtmosphericDragAdvanced(latest_with_alt, area, mass);
             double comm = Model::calculateCommDegradation(latest);
             double decay = Model::estimateOrbitDecay(latest, area, mass, altitude);
             double panelDeg = Model::estimateSolarPanelDegradation(latest);
@@ -78,7 +82,8 @@ int main(int argc, char* argv[]) {
             double seu_area = 1.0; // cm^2
             double seu_duration = 86400.0; // seconds in a day
             double seu_rate = Model::estimateSEURate(latest, seu_area, seu_duration);
-            std::cout << "Atmospheric Drag: " << drag << "\n";
+            std::cout << "Atmospheric Drag (Simple): " << drag_simple << "\n";
+            std::cout << "Atmospheric Drag (Advanced): " << drag_advanced << " m/s^2\n";
             std::cout << "Comm Degradation: " << comm << "\n";
             std::cout << "Estimated Orbit Decay Rate: " << decay << " km/day\n";
             std::cout << "Solar Panel Degradation: " << panelDeg << " %/year\n";
