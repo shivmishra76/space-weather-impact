@@ -9,6 +9,8 @@ add_executable(space-weather-impact
     src/fetcher.cpp
     src/parser.cpp
     src/model.cpp
+    src/config.cpp
+    src/webhook.cpp
 )
 
 # Include directories

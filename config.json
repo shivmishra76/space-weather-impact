@@ -1,0 +1,8 @@
+{
+  "webhooks": [
+    {
+      "url": "https://webhook.site/5b080342-2a44-4b76-aa58-4569118e7cac",
+      "events": ["solar_flare", "geomagnetic_storm"]
+    }
+  ]
+} 

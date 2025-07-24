@@ -178,6 +178,30 @@ test_model/fast:
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test_model.dir/build.make tests/CMakeFiles/test_model.dir/build
 .PHONY : test_model/fast
 
+src/config.o: src/config.cpp.o
+.PHONY : src/config.o
+
+# target to build an object file
+src/config.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/space-weather-impact.dir/build.make CMakeFiles/space-weather-impact.dir/src/config.cpp.o
+.PHONY : src/config.cpp.o
+
+src/config.i: src/config.cpp.i
+.PHONY : src/config.i
+
+# target to preprocess a source file
+src/config.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/space-weather-impact.dir/build.make CMakeFiles/space-weather-impact.dir/src/config.cpp.i
+.PHONY : src/config.cpp.i
+
+src/config.s: src/config.cpp.s
+.PHONY : src/config.s
+
+# target to generate assembly for a file
+src/config.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/space-weather-impact.dir/build.make CMakeFiles/space-weather-impact.dir/src/config.cpp.s
+.PHONY : src/config.cpp.s
+
 src/fetcher.o: src/fetcher.cpp.o
 .PHONY : src/fetcher.o
 
@@ -274,6 +298,30 @@ src/parser.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/space-weather-impact.dir/build.make CMakeFiles/space-weather-impact.dir/src/parser.cpp.s
 .PHONY : src/parser.cpp.s
 
+src/webhook.o: src/webhook.cpp.o
+.PHONY : src/webhook.o
+
+# target to build an object file
+src/webhook.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/space-weather-impact.dir/build.make CMakeFiles/space-weather-impact.dir/src/webhook.cpp.o
+.PHONY : src/webhook.cpp.o
+
+src/webhook.i: src/webhook.cpp.i
+.PHONY : src/webhook.i
+
+# target to preprocess a source file
+src/webhook.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/space-weather-impact.dir/build.make CMakeFiles/space-weather-impact.dir/src/webhook.cpp.i
+.PHONY : src/webhook.cpp.i
+
+src/webhook.s: src/webhook.cpp.s
+.PHONY : src/webhook.s
+
+# target to generate assembly for a file
+src/webhook.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/space-weather-impact.dir/build.make CMakeFiles/space-weather-impact.dir/src/webhook.cpp.s
+.PHONY : src/webhook.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -287,6 +335,9 @@ help:
 	@echo "... test_fetcher"
 	@echo "... test_model"
 	@echo "... test_parser"
+	@echo "... src/config.o"
+	@echo "... src/config.i"
+	@echo "... src/config.s"
 	@echo "... src/fetcher.o"
 	@echo "... src/fetcher.i"
 	@echo "... src/fetcher.s"
@@ -299,6 +350,9 @@ help:
 	@echo "... src/parser.o"
 	@echo "... src/parser.i"
 	@echo "... src/parser.s"
+	@echo "... src/webhook.o"
+	@echo "... src/webhook.i"
+	@echo "... src/webhook.s"
 .PHONY : help
 
 

@@ -4,6 +4,8 @@
 #include "fetcher.h"
 #include "parser.h"
 #include "model.h"
+#include "config.h"
+#include "webhook.h"
 
 void printUsage() {
     std::cout << "Usage: space-weather-impact <command> [options]\n";
@@ -13,6 +15,8 @@ void printUsage() {
 }
 
 int main(int argc, char* argv[]) {
+    // Load config (webhooks)
+    Config config = loadConfig("config.json");
     if (argc < 2) {
         printUsage();
         return 1;
@@ -40,11 +44,33 @@ int main(int argc, char* argv[]) {
             std::cout << "  Kp Index: " << kp << "\n";
 
             // Event detection: highlight if X-ray flux or Kp index is high
-            if (xray > 1e-4) {
+            if (xray > -2) {
                 std::cout << "  [Event] Solar flare detected (X-ray flux > 1e-4 W/m^2)!\n";
+                // Send webhook for solar flare
+                nlohmann::json payload = {
+                    {"event", "solar_flare"},
+                    {"xray_flux", xray},
+                    {"timestamp", latest.value("time-tag", "")}
+                };
+                for (const auto& wh : config.webhooks) {
+                    if (std::find(wh.events.begin(), wh.events.end(), "solar_flare") != wh.events.end()) {
+                        try { sendWebhook(wh.url, payload); } catch (...) { /* ignore errors */ }
+                    }
+                }
             }
             if (kp >= 5.0) {
                 std::cout << "  [Event] Geomagnetic storm conditions (Kp >= 5)!\n";
+                // Send webhook for geomagnetic storm
+                nlohmann::json payload = {
+                    {"event", "geomagnetic_storm"},
+                    {"kp_index", kp},
+                    {"timestamp", latest.value("time-tag", "")}
+                };
+                for (const auto& wh : config.webhooks) {
+                    if (std::find(wh.events.begin(), wh.events.end(), "geomagnetic_storm") != wh.events.end()) {
+                        try { sendWebhook(wh.url, payload); } catch (...) { /* ignore errors */ }
+                    }
+                }
             }
 
             // Prepare data for plotting (F10.7 and Kp over time)
